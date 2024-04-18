@@ -12,9 +12,28 @@ script:-
 
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>    @include('sales.sales._script.script')
     <script >
+          var N = '';
+        var G = '';
+        var T = '';
+
         var socket = io.connect("ws://localhost:5000");
         socket.on('serial_data', function(data) {
-            // console.log(data);
-            $('#product-1').val(data)
+
+            if (data .slice(-1) == 'N')
+            {
+                N=data
+                $('#product-1').val(N)
+            }
+            else if (data .slice(-1) == 'G')
+            {
+                G=data
+            }
+            else if (data .slice(-1) == 'T')
+            {
+                T=data
+            }
+            
+
+
         });
     </script>
