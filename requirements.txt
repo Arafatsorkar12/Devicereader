@@ -1,3 +1,20 @@
 uvicorn==0.29.0
 pyserial==3.5
 python-socketio==5.11.2
+
+
+
+NOTE:::
+
+POST Mane URL :-   ws://127.0.0.1:5000/
+
+script:-
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>    @include('sales.sales._script.script')
+    <script >
+        var socket = io.connect("ws://localhost:5000");
+        socket.on('serial_data', function(data) {
+            // console.log(data);
+            $('#product-1').val(data)
+        });
+    </script>
