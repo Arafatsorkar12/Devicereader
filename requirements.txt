@@ -36,4 +36,25 @@ script:-
 
 
         });
+
+Or 
+when by class 
+
+
+socket.on('serial_data', function(data) {
+            var focusedRow = $(':focus').closest('tr'); // Get the row containing the focused input field
+
+            if (focusedRow.length > 0) { // Check if a row containing the focused input field exists
+                if (data.slice(-1) == 'N') {
+                    var N = parseFloat(data.match(/[\d.]+/)[0]);
+                    focusedRow.find('.input-N').val(N);
+                } else if (data.slice(-1) == 'G') {
+                    var G = parseFloat(data.match(/[\d.]+/)[0]);
+                    focusedRow.find('.input-G').val(G);
+                } else if (data.slice(-1) == 'T') {
+                    var T = parseFloat(data.match(/[\d.]+/)[0]);
+                    focusedRow.find('.input-T').val(T);
+                }
+            }
+        });
     </script>
