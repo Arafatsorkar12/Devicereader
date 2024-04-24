@@ -1,3 +1,5 @@
+
+--------->For Single USB 
 #!/usr/bin/python3
 import asyncio
 import serial
@@ -48,3 +50,63 @@ if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=5000)
 
+
+
+
+
+
+
+
+
+
+
+
+--------->For multiple USB 
+
+
+import asyncio
+import serial
+import socketio
+import threading
+import time
+
+# List of USB ports to connect to
+usb_ports = ['/dev/ttyUSB0','/dev/ttyUSB1']
+
+# Dictionary to hold serial instances
+serial_ports = {}
+
+# Initialize socket.io server
+sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins=[
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+])
+app = socketio.ASGIApp(sio)
+async def read_serial(port):
+    print("Reading from", port)
+    serial_port = serial.Serial(port)
+    while True:
+        # Read a line from the serial port
+        line = serial_port.readline().decode().strip()
+        print("Received from", port, ":", line)
+        await sio.emit('serial_data',port +' '+ line )
+
+
+@sio.event
+async def connect(sid, environ):
+    print('Client connected')
+
+@sio.event
+async def disconnect(sid):
+    print('Client disconnected')
+
+if __name__ == '__main__':
+    # Start a separate thread for each serial port
+    serial_threads = []
+    for port in usb_ports:
+        t=threading.Thread(target=lambda: asyncio.run(read_serial(port)))
+        t.start()
+        
+    # Start the socket.io server
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=5000)
